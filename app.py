@@ -10,9 +10,9 @@ def answer_call():
     resp = VoiceResponse()
 
     # Read a message aloud to the caller
-    resp.say("Test phone number for hack NYU hackathon", voice='alice')
+    resp.say("Welcome to Polyglot AI Language Tutor!! This is our project for HACKNYU", voice='alice')
 
     return str(resp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
