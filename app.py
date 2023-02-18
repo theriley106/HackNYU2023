@@ -17,8 +17,8 @@ except:
 
 app = Flask(__name__)
 sock = Sock(app)
-twilio_client = Client()
-model = vosk.Model('model')
+twilio_client = Client(SID, AUTH)
+model = vosk.Model('/Users/christopherlambert/Downloads/vosk-model-en-us-0.42-gigaspeech')
 
 CL = '\x1b[0K'
 BS = '\x08'
@@ -44,8 +44,13 @@ def call():
     response.append(start)
     response.say('Please leave a message')
     response.pause(length=60)
+    while IS_LOADING_STILL[0] == False:
+        time.sleep(.1)
+        response.pause(length=20)
     print(f'Incoming call from {request.form["From"]}')
     return str(response), 200, {'Content-Type': 'text/xml'}
+
+IS_LOADING_STILL = [False]
 
 @sock.route('/stream')
 def stream(ws):
@@ -57,6 +62,7 @@ def stream(ws):
         if packet['event'] == 'start':
             print('Streaming is starting')
         elif packet['event'] == 'stop':
+            IS_LOADING_STILL[0] = True
             print('\nStreaming has stopped')
         elif packet['event'] == 'media':
             audio = base64.b64decode(packet['media']['payload'])
