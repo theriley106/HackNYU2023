@@ -24,4 +24,3 @@ def fetch(call):
 
     return response['choices'][0]['text'].strip()
 
-
